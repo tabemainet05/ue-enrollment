@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UE • Enrollment</title>
+
+<style>
+  :root{
+    --brand:#cf0a0a;
+    --brand2:#ff2d2d;
+    --text:#0f172a;
+    --muted:#64748b;
+    --bg:#fbfbfc;
+    --surface:#fff;
+    --border:rgba(15,23,42,.10);
+    --shadow:0 18px 45px rgba(2,6,23,.10);
+    --shadow-soft:0 10px 22px rgba(2,6,23,.07);
+    --radius:18px;
+    --font: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    --ok:#16a34a;
+    --warn:#b45309;
+    --bad:#dc2626;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:var(--font);
+    color:var(--text);
+    background:
+      radial-gradient(900px 520px at 18% -10%, rgba(207,10,10,.10), transparent 60%),
+      radial-gradient(900px 520px at 92% 0%, rgba(207,10,10,.06), transparent 55%),
+      var(--bg);
+    min-height:100vh;
+  }
+
+  /* ===== Top Nav ===== */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:rgba(255,255,255,.90);
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1200px;
+    margin:0 auto;
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+  }
+  .brand .logo{
+    width:56px; height:56px;
+    border-radius:16px;
+    background:var(--brand);
+    box-shadow:0 14px 30px rgba(207,10,10,.25);
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+    flex:0 0 auto;
+  }
+  .brand .logo img{
+    width:100%; height:100%;
+    object-fit:contain;
+    padding:6px;
+  }
+  .brand .title{ display:flex; flex-direction:column; line-height:1.1; }
+  .brand .title strong{
+    font-size:16px; color:var(--brand); letter-spacing:-.01em;
+  }
+  .brand .title span{ font-size:12.5px; color:var(--muted); }
+
+  .nav-actions{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .pill{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:12px 16px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,.08);
+    background:#f3f4f6;
+    color:#0f172a;
+    font-weight:700; font-size:14px;
+    text-decoration:none;
+    transition:.15s;
+  }
+  .pill.primary{
+    background:linear-gradient(135deg,var(--brand),var(--brand2));
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 14px 26px rgba(207,10,10,.18);
+  }
+  .pill svg{ width:18px; height:18px; }
+
+  .red-line{
+    height:3px;
+    background:linear-gradient(90deg,var(--brand), rgba(207,10,10,.25), transparent);
+  }
+
+  /* ===== Page ===== */
+  .container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:26px 18px 54px;
+  }
+
+  .hero{
+    text-align:center;
+    margin-top:10px;
+  }
+  .hero h1{
+    margin:0;
+    font-size:34px;
+    letter-spacing:-.02em;
+  }
+  .hero p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  /* Stepper */
+ .stepper{
+  overflow:auto;
+  justify-content:flex-start;
+  padding-bottom:6px;
+  -webkit-overflow-scrolling: touch;
+}
+.step{ min-width:120px; }
+  
+.step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    min-width:140px;
+  }
+  .bubble{
+    width:36px; height:36px;
+    border-radius:999px;
+    display:grid;
+    place-items:center;
+    font-weight:800;
+    font-size:13px;
+    background:#e5e7eb;
+    color:#334155;
+    border:1px solid rgba(15,23,42,.12);
+  }
+  .step.active .bubble{
+    background:linear-gradient(135deg,var(--brand),var(--brand2));
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 12px 22px rgba(207,10,10,.18);
+  }
+  .step.done .bubble{
+    background:rgba(22,163,74,.14);
+    color:var(--ok);
+    border-color: rgba(22,163,74,.25);
+  }
+  .step label{
+    font-size:12px;
+    color:#334155;
+    font-weight:800;
+  }
+  .step.active label{ color:var(--brand); }
+  .line{
+    height:3px;
+    width:120px;
+    border-radius:999px;
+    background:#e5e7eb;
+  }
+  .line.fill{ background:rgba(207,10,10,.25); }
+
+  /* Card */
+  .card{
+    margin:22px auto 0;
+    max-width:860px;
+    background:var(--surface);
+    border:1px solid rgba(207,10,10,.20);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card-inner{
+    padding:22px;
+  }
+  .card-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:18px 22px 0;
+  }
+  .card-head .icon{
+    width:40px; height:40px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:rgba(207,10,10,.10);
+    color:var(--brand);
+    border:1px solid rgba(207,10,10,.18);
+  }
+  .card-head h2{
+    margin:0;
+    font-size:18px;
+    color:var(--brand);
+    letter-spacing:-.01em;
+  }
+
+  /* Form bits */
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:16px;
+  }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    font-weight:800;
+    margin-bottom:8px;
+    color:#0f172a;
+  }
+  .input, select{
+    width:100%;
+    padding:12px 12px;
+    border-radius:12px;
+    border:1.5px solid #cbd5e1;
+    outline:none;
+    font-size:14px;
+    background:#fff;
+    transition:.15s;
+  }
+  .input:focus, select:focus{
+    border-color:var(--brand);
+    box-shadow:0 0 0 5px rgba(207,10,10,.16);
+  }
+
+  /* Alerts */
+  .alert{
+    margin-top:14px;
+    border-radius:14px;
+    padding:12px 12px;
+    border:1px solid rgba(15,23,42,.10);
+    background:#f8fafc;
+    color:#0f172a;
+    font-size:13px;
+    display:none;
+  }
+  .alert.show{ display:block; }
+  .alert.bad{
+    background:rgba(220,38,38,.08);
+    border-color:rgba(220,38,38,.20);
+    color:var(--bad);
+    font-weight:700;
+  }
+  .alert.warn{
+    background:rgba(180,83,9,.10);
+    border-color:rgba(180,83,9,.18);
+    color:var(--warn);
+    font-weight:700;
+  }
+  .alert.ok{
+    background:rgba(22,163,74,.10);
+    border-color:rgba(22,163,74,.18);
+    color:var(--ok);
+    font-weight:700;
+  }
+
+  /* Subjects list */
+  .subjects-wrap{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns: 1.1fr 1.4fr; /* ✅ wider selected panel */
+    gap:24px;
+  }
+  .panel{
+    border:1px solid rgba(15,23,42,.10);
+    border-radius:16px;
+    background:#fff;
+    overflow:hidden;
+  }
+  .panel .panel-title{
+    padding:12px 14px;
+    font-weight:900;
+    font-size:13px;
+    color:#0f172a;
+    background:#f8fafc;
+    border-bottom:1px solid rgba(15,23,42,.08);
+  }
+  .subject-list{
+    max-height:420px; /* ✅ taller list */
+    overflow:auto;
+  }
+  .subject{
+    padding:12px 14px;
+    border-bottom:1px solid rgba(15,23,42,.08);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .subject:last-child{ border-bottom:none; }
+  .subject .meta{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    min-width:0;
+  }
+  .subject .meta .code{
+    font-weight:900;
+    color:#0f172a;
+    font-size:13px;
+  }
+  .subject .meta .name{
+    font-size:13px;
+    color:#334155;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:420px;
+  }
+  .subject .meta .details{
+    font-size:12px;
+    color:var(--muted);
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:900;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,.10);
+    background:#f8fafc;
+    color:#0f172a;
+    white-space:nowrap;
+  }
+  .badge.full{
+    background:rgba(220,38,38,.10);
+    color:var(--bad);
+    border-color:rgba(220,38,38,.22);
+  }
+  .badge.ok{
+    background:rgba(22,163,74,.10);
+    color:var(--ok);
+    border-color:rgba(22,163,74,.22);
+  }
+  .btn-add{
+    border:none;
+    cursor:pointer;
+    border-radius:12px;
+    padding:9px 12px;
+    background:linear-gradient(135deg,var(--brand),var(--brand2));
+    color:#fff;
+    font-weight:900;
+    font-size:12px;
+    box-shadow:0 10px 18px rgba(207,10,10,.16);
+  }
+  .btn-add:disabled{
+    background:#e5e7eb;
+    color:#64748b;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+
+  /* ✅ Larger table (Selected + Review) */
+  table{
+    width:100%;
+    border-collapse:collapse; /* ✅ cleaner */
+  }
+  thead th{
+    text-align:left;
+    font-size:14px;         /* ✅ bigger */
+    font-weight:800;
+    padding:14px 16px;      /* ✅ more spacing */
+    background:#f8fafc;
+    border-bottom:1px solid rgba(15,23,42,.10);
+    color:#0f172a;
+    position: sticky;       /* ✅ sticky header */
+    top: 0;
+    z-index: 1;
+  }
+  tbody td{
+    padding:16px;           /* ✅ more spacing */
+    border-bottom:1px solid rgba(15,23,42,.08);
+    font-size:15px;         /* ✅ bigger */
+    color:#0f172a;
+    vertical-align:top;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  .muted{ color:var(--muted); font-size:12px; }
+
+  /* ✅ Make selected table container taller */
+  .selected-scroll{
+    max-height:520px;  /* ✅ bigger view */
+    overflow:auto;
+  }
+
+  .btn-remove{
+    border:1px solid rgba(220,38,38,.25);
+    background:rgba(220,38,38,.08);
+    color:var(--bad);
+    font-weight:900;
+    padding:7px 10px;
+    border-radius:12px;
+    cursor:pointer;
+  }
+
+  /* Footer buttons */
+  .footer{
+    padding:18px 22px 22px;
+    border-top:1px solid rgba(15,23,42,.08);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 16px;
+    border-radius:14px;
+    border:1px solid rgba(15,23,42,.12);
+    background:#f8fafc;
+    color:#0f172a;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .btn.primary{
+    border:none;
+    background:linear-gradient(135deg,var(--brand),var(--brand2));
+    color:#fff;
+    box-shadow:0 14px 26px rgba(207,10,10,.18);
+  }
+  .btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+  }
+
+@media (max-width: 920px){
+  thead{ display:none; }
+  table, tbody, tr, td{ display:block; width:100%; }
+  tbody tr{
+    border-bottom:1px solid rgba(15,23,42,.08);
+    padding:12px 14px;
+  }
+  tbody td{
+    border:none;
+    padding:6px 0;
+    font-size:14px;
+  }
+  tbody td:nth-child(1)::before{ content:"Code: "; font-weight:800; color:#475569; }
+  tbody td:nth-child(2)::before{ content:"Subject: "; font-weight:800; color:#475569; }
+  tbody td:nth-child(3)::before{ content:"Schedule: "; font-weight:800; color:#475569; }
+  tbody td:nth-child(4)::before{ content:"Professor: "; font-weight:800; color:#475569; }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo">
+        <img src="University_of_the_East_seal.png" alt="University of the East Seal">
+      </div>
+      <div class="title">
+        <strong>University of the East</strong>
+        <span>Student Enrollment Portal</span>
+      </div>
+    </div>
+
+    <nav class="nav-actions">
+      <a class="pill primary" href="enrollment.html" id="navEnroll">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M19 8v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Enroll Subject
+      </a>
+
+      <a class="pill" href="dashboard.html" id="navSubjects">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M10 3H3v7h7V3ZM21 3h-7v7h7V3ZM10 14H3v7h7v-7ZM21 14h-7v7h7v-7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        My Subjects
+      </a>
+
+      <a class="pill" href="#" id="btnLogout">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M21 21V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Logout
+      </a>
+    </nav>
+  </div>
+  <div class="red-line"></div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h1>Student Enrollment</h1>
+    <p>Complete the form below to enroll in your program</p>
+  </section>
+
+  <!-- Stepper -->
+  <section class="stepper" aria-label="Enrollment Steps">
+    <div class="step" id="s1">
+      <div class="bubble">1</div>
+      <label>Course</label>
+    </div>
+    <div class="line" id="l1"></div>
+    <div class="step" id="s2">
+      <div class="bubble">2</div>
+      <label>School Year</label>
+    </div>
+    <div class="line" id="l2"></div>
+    <div class="step" id="s3">
+      <div class="bubble">3</div>
+      <label>Subjects</label>
+    </div>
+    <div class="line" id="l3"></div>
+    <div class="step" id="s4">
+      <div class="bubble">4</div>
+      <label>Review</label>
+    </div>
+  </section>
+
+  <!-- Card -->
+  <section class="card">
+    <div class="card-head">
+      <div class="icon" id="cardIcon">🎓</div>
+      <h2 id="cardTitle">Choose your course</h2>
+    </div>
+
+    <div class="card-inner">
+      <!-- Alerts -->
+      <div class="alert" id="alertBox"></div>
+
+      <!-- Step contents -->
+      <div id="step1">
+        <div class="grid">
+          <div class="field">
+            <label>Course *</label>
+            <select id="courseSelect">
+              <option value="">Select course</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Student Number</label>
+            <input class="input" id="studDisplay" disabled />
+          </div>
+        </div>
+        <div class="muted" style="margin-top:10px;">
+          You must select a course before proceeding.
+        </div>
+      </div>
+
+      <div id="step2" style="display:none;">
+        <div class="grid">
+          <div class="field">
+            <label>School Year *</label>
+            <select id="schoolYearSelect">
+              <option value="">Select school year</option>
+              <option>2025–2026</option>
+              <option>2026–2027</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Year Level *</label>
+            <select id="yearLevelSelect">
+              <option value="">Select year level</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+        </div>
+        <div class="muted" style="margin-top:10px;">
+          This helps us show the correct subject offerings.
+        </div>
+      </div>
+
+      <div id="step3" style="display:none;">
+        <div class="grid">
+          <div class="field">
+            <label>Filter by Day</label>
+            <select id="dayFilter">
+              <option value="">All</option>
+              <option value="Mon">Mon</option>
+              <option value="Tue">Tue</option>
+              <option value="Wed">Wed</option>
+              <option value="Thu">Thu</option>
+              <option value="Fri">Fri</option>
+              <option value="Sat">Sat</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Search Subject</label>
+            <input class="input" id="searchBox" placeholder="Search by code or name..." />
+          </div>
+        </div>
+
+        <div class="subjects-wrap">
+          <div class="panel">
+            <div class="panel-title">Available Subjects</div>
+            <div class="subject-list" id="availableList"></div>
+          </div>
+
+          <div class="panel selected-subjects">
+            <div class="panel-title">Selected Subjects</div>
+            <div class="selected-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:120px;">Code</th>
+                    <th>Subject</th>
+                    <th style="width:220px;">Schedule</th>
+                    <th style="width:180px;">Professor</th>
+                    <th style="width:110px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="selectedTable"></tbody>
+              </table>
+            </div>
+            <div class="muted" style="padding:12px 14px;" id="selectedHint">
+              No subjects selected yet.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="step4" style="display:none;">
+        <div class="grid">
+          <div class="field">
+            <label>Course</label>
+            <input class="input" id="reviewCourse" disabled />
+          </div>
+          <div class="field">
+            <label>School Year</label>
+            <input class="input" id="reviewSY" disabled />
+          </div>
+          <div class="field">
+            <label>Year Level</label>
+            <input class="input" id="reviewYL" disabled />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input class="input" id="reviewEmail" disabled />
+          </div>
+        </div>
+
+        <div style="margin-top:16px;" class="panel selected-subjects">
+          <div class="panel-title">Subjects to Enroll</div>
+          <div class="selected-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:120px;">Code</th>
+                  <th>Subject</th>
+                  <th style="width:220px;">Schedule</th>
+                  <th style="width:180px;">Professor</th>
+                </tr>
+              </thead>
+              <tbody id="reviewTable"></tbody>
+            </table>
+          </div>
+          <div class="muted" style="padding:12px 14px;" id="reviewHint">
+            No subjects selected.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button class="btn" id="btnPrev" disabled>
+        ← Previous
+      </button>
+      <button class="btn primary" id="btnNext">
+        Next Step →
+      </button>
+    </div>
+  </section>
+</main>
+
+<script>
+  // ===== Login guard (connected to dashboard/login) =====
+  const ueEmail = localStorage.getItem("ue_email") || "";
+  const ueStudentNumber = localStorage.getItem("ue_studentNumber") || "";
+  if (!ueEmail || !ueStudentNumber) window.location.href = "login.html";
+
+  // ===== Simple “database” for demo =====
+  const COURSES = [
+    { id:"BSIT", name:"BS Information Technology" },
+    { id:"BSCS", name:"BS Computer Science" },
+    { id:"BSA",  name:"BS Accountancy" },
+    { id:"BSBA", name:"BS Business Administration" }
+  ];
+
+  const SUBJECTS_BY_COURSE = {
+    "BSIT": [
+      { code:"IT101", name:"Introduction to Computing", prof:"Prof. Santos", seatsLeft: 0, schedule:{day:"Mon", start:"09:00", end:"11:00"} },
+      { code:"IT102", name:"Programming 1", prof:"Prof. Rivera", seatsLeft: 12, schedule:{day:"Mon", start:"11:00", end:"13:00"} },
+      { code:"IT103", name:"Web Development Fundamentals", prof:"Prof. Dela Cruz", seatsLeft: 6, schedule:{day:"Tue", start:"10:00", end:"12:00"} },
+      { code:"IT104", name:"Discrete Mathematics", prof:"Prof. Lim", seatsLeft: 3, schedule:{day:"Wed", start:"09:00", end:"11:00"} },
+      { code:"IT105", name:"Database Systems", prof:"Prof. Reyes", seatsLeft: 10, schedule:{day:"Thu", start:"13:00", end:"15:00"} },
+    ],
+    "BSCS": [
+      { code:"CS101", name:"Computer Science Fundamentals", prof:"Prof. Garcia", seatsLeft: 8, schedule:{day:"Mon", start:"09:30", end:"11:30"} },
+      { code:"CS102", name:"Algorithms 1", prof:"Prof. Uy", seatsLeft: 0, schedule:{day:"Tue", start:"13:00", end:"15:00"} },
+      { code:"CS103", name:"Data Structures", prof:"Prof. Bautista", seatsLeft: 5, schedule:{day:"Wed", start:"10:00", end:"12:00"} },
+    ],
+    "BSA": [
+      { code:"AC101", name:"Financial Accounting", prof:"Prof. Aquino", seatsLeft: 9, schedule:{day:"Thu", start:"09:00", end:"11:00"} },
+      { code:"AC102", name:"Managerial Accounting", prof:"Prof. Flores", seatsLeft: 2, schedule:{day:"Fri", start:"10:00", end:"12:00"} },
+    ],
+    "BSBA": [
+      { code:"BA101", name:"Principles of Management", prof:"Prof. Ramos", seatsLeft: 11, schedule:{day:"Mon", start:"14:00", end:"16:00"} },
+      { code:"BA102", name:"Marketing Fundamentals", prof:"Prof. Tan", seatsLeft: 0, schedule:{day:"Tue", start:"09:00", end:"11:00"} },
+    ]
+  };
+
+  // ===== State =====
+  let step = 1;
+  const state = { courseId:"", schoolYear:"", yearLevel:"", selected: [] };
+
+  // ===== Elements =====
+  const alertBox = document.getElementById("alertBox");
+  const courseSelect = document.getElementById("courseSelect");
+  const schoolYearSelect = document.getElementById("schoolYearSelect");
+  const yearLevelSelect = document.getElementById("yearLevelSelect");
+  const dayFilter = document.getElementById("dayFilter");
+  const searchBox = document.getElementById("searchBox");
+  const availableList = document.getElementById("availableList");
+  const selectedTable = document.getElementById("selectedTable");
+  const selectedHint = document.getElementById("selectedHint");
+
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+
+  // review
+  const reviewCourse = document.getElementById("reviewCourse");
+  const reviewSY = document.getElementById("reviewSY");
+  const reviewYL = document.getElementById("reviewYL");
+  const reviewEmail = document.getElementById("reviewEmail");
+  const reviewTable = document.getElementById("reviewTable");
+  const reviewHint = document.getElementById("reviewHint");
+
+  // student display
+  document.getElementById("studDisplay").value = ueStudentNumber;
+
+  // nav actions
+  document.getElementById("btnLogout").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("ue_email");
+    localStorage.removeItem("ue_studentNumber");
+    window.location.href = "login.html";
+  });
+
+  // ===== Helpers =====
+  function showAlert(type, message){
+    alertBox.className = "alert show " + (type || "");
+    alertBox.textContent = message;
+  }
+  function clearAlert(){
+    alertBox.className = "alert";
+    alertBox.textContent = "";
+  }
+
+  function enrollmentKey(){
+    return `ue_enrollment_${ueStudentNumber}`;
+  }
+
+  function timeToMinutes(t){
+    const [h,m] = t.split(":").map(Number);
+    return (h*60)+m;
+  }
+
+  function scheduleConflicts(a, b){
+    if (a.day !== b.day) return false;
+    const aStart = timeToMinutes(a.start);
+    const aEnd = timeToMinutes(a.end);
+    const bStart = timeToMinutes(b.start);
+    const bEnd = timeToMinutes(b.end);
+    return aStart < bEnd && bStart < aEnd;
+  }
+
+  function isSelected(code){
+    return state.selected.some(s => s.code === code);
+  }
+
+  function canAddSubject(subject){
+    if (subject.seatsLeft <= 0) return { ok:false, reason:"FULL" };
+    if (isSelected(subject.code)) return { ok:false, reason:"ALREADY" };
+
+    for (const sel of state.selected){
+      if (scheduleConflicts(sel.schedule, subject.schedule)){
+        return { ok:false, reason:"CONFLICT", with: sel };
+      }
+    }
+    return { ok:true };
+  }
+
+  function formatSchedule(s){
+    return `${s.day} ${s.start}–${s.end}`;
+  }
+
+  function courseName(id){
+    const c = COURSES.find(x => x.id === id);
+    return c ? `${c.id} • ${c.name}` : "—";
+  }
+
+  // ===== Renderers =====
+  function renderCourses(){
+    COURSES.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = `${c.id} — ${c.name}`;
+      courseSelect.appendChild(opt);
+    });
+  }
+
+  function currentSubjects(){
+    const list = SUBJECTS_BY_COURSE[state.courseId] || [];
+    const day = dayFilter.value;
+    const q = searchBox.value.trim().toLowerCase();
+
+    return list.filter(s => {
+      const dayOk = !day || s.schedule.day === day;
+      const qOk = !q || s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q);
+      return dayOk && qOk;
+    });
+  }
+
+  function renderAvailable(){
+    availableList.innerHTML = "";
+    const list = currentSubjects();
+
+    if (!state.courseId){
+      availableList.innerHTML = `<div style="padding:14px;" class="muted">Select a course first.</div>`;
+      return;
+    }
+
+    if (!list.length){
+      availableList.innerHTML = `<div style="padding:14px;" class="muted">No matching subjects found.</div>`;
+      return;
+    }
+
+    list.forEach(sub => {
+      const wrap = document.createElement("div");
+      wrap.className = "subject";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const code = document.createElement("div");
+      code.className = "code";
+      code.textContent = sub.code;
+
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = sub.name;
+
+      const details = document.createElement("div");
+      details.className = "details";
+      details.textContent = `${formatSchedule(sub.schedule)} • ${sub.prof}`;
+
+      meta.appendChild(code);
+      meta.appendChild(name);
+      meta.appendChild(details);
+
+      const right = document.createElement("div");
+      right.style.display = "flex";
+      right.style.flexDirection = "column";
+      right.style.gap = "8px";
+      right.style.alignItems = "flex-end";
+
+      const status = document.createElement("div");
+      if (sub.seatsLeft <= 0){
+        status.className = "badge full";
+        status.textContent = "FULL";
+      } else {
+        status.className = "badge ok";
+        status.textContent = `${sub.seatsLeft} seats`;
+      }
+
+      const addBtn = document.createElement("button");
+      addBtn.className = "btn-add";
+      addBtn.textContent = "Add";
+      const check = canAddSubject(sub);
+      if (!check.ok) addBtn.disabled = true;
+
+      addBtn.addEventListener("click", () => {
+        const verify = canAddSubject(sub);
+        if (!verify.ok){
+          if (verify.reason === "FULL") return showAlert("bad", `${sub.code} is already FULL.`);
+          if (verify.reason === "CONFLICT") return showAlert("bad", `Schedule conflict: ${sub.code} conflicts with ${verify.with.code} (${formatSchedule(verify.with.schedule)}).`);
+          return showAlert("warn", `You already selected ${sub.code}.`);
+        }
+
+        state.selected.push(sub);
+        clearAlert();
+        showAlert("ok", `${sub.code} added successfully.`);
+        renderSelected();
+        renderAvailable();
+      });
+
+      right.appendChild(status);
+      right.appendChild(addBtn);
+
+      wrap.appendChild(meta);
+      wrap.appendChild(right);
+
+      availableList.appendChild(wrap);
+    });
+  }
+
+  function renderSelected(){
+    selectedTable.innerHTML = "";
+
+    if (!state.selected.length){
+      selectedHint.style.display = "block";
+    } else {
+      selectedHint.style.display = "none";
+    }
+
+    state.selected.forEach(sub => {
+      const tr = document.createElement("tr");
+
+      const tdCode = document.createElement("td");
+      tdCode.textContent = sub.code;
+
+      const tdName = document.createElement("td");
+      tdName.innerHTML = `<div style="font-weight:900;">${sub.name}</div><div class="muted">${state.courseId}</div>`;
+
+      const tdSched = document.createElement("td");
+      tdSched.textContent = formatSchedule(sub.schedule);
+
+      const tdProf = document.createElement("td");
+      tdProf.textContent = sub.prof;
+
+      const tdAct = document.createElement("td");
+      const rm = document.createElement("button");
+      rm.className = "btn-remove";
+      rm.textContent = "Remove";
+      rm.addEventListener("click", () => {
+        state.selected = state.selected.filter(s => s.code !== sub.code);
+        clearAlert();
+        showAlert("warn", `${sub.code} removed.`);
+        renderSelected();
+        renderAvailable();
+      });
+      tdAct.appendChild(rm);
+
+      tr.appendChild(tdCode);
+      tr.appendChild(tdName);
+      tr.appendChild(tdSched);
+      tr.appendChild(tdProf);
+      tr.appendChild(tdAct);
+
+      selectedTable.appendChild(tr);
+    });
+  }
+
+  function renderReview(){
+    reviewCourse.value = courseName(state.courseId);
+    reviewSY.value = state.schoolYear || "—";
+    reviewYL.value = state.yearLevel ? `${state.yearLevel}${state.yearLevel==="1"?"st":state.yearLevel==="2"?"nd":state.yearLevel==="3"?"rd":"th"} Year` : "—";
+    reviewEmail.value = ueEmail;
+
+    reviewTable.innerHTML = "";
+    if (!state.selected.length){
+      reviewHint.style.display = "block";
+      return;
+    }
+    reviewHint.style.display = "none";
+
+    state.selected.forEach(sub => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${sub.code}</td>
+        <td><div style="font-weight:900;">${sub.name}</div><div class="muted">${state.courseId}</div></td>
+        <td>${formatSchedule(sub.schedule)}</td>
+        <td>${sub.prof}</td>
+      `;
+      reviewTable.appendChild(tr);
+    });
+  }
+
+  function setStep(n){
+    step = n;
+    clearAlert();
+
+    const steps = ["s1","s2","s3","s4"].map(id => document.getElementById(id));
+    const lines = ["l1","l2","l3"].map(id => document.getElementById(id));
+
+    steps.forEach((el, idx) => {
+      const num = idx+1;
+      el.classList.toggle("active", num === step);
+      el.classList.toggle("done", num < step);
+    });
+    lines.forEach((el, idx) => {
+      el.classList.toggle("fill", (idx+1) < step);
+    });
+
+    document.getElementById("step1").style.display = step===1 ? "block" : "none";
+    document.getElementById("step2").style.display = step===2 ? "block" : "none";
+    document.getElementById("step3").style.display = step===3 ? "block" : "none";
+    document.getElementById("step4").style.display = step===4 ? "block" : "none";
+
+    const titles = {
+      1: "Choose your course",
+      2: "Select your school year & year level",
+      3: "Pick your subjects",
+      4: "Review & submit enrollment"
+    };
+    document.getElementById("cardTitle").textContent = titles[step] || "Enrollment";
+
+    btnPrev.disabled = step === 1;
+    btnNext.textContent = (step === 4) ? "Submit Enrollment" : "Next Step →";
+
+    if (step === 3){
+      renderAvailable();
+      renderSelected();
+    }
+    if (step === 4){
+      renderReview();
+    }
+  }
+
+  function stepValid(n){
+    if (n === 1){
+      if (!state.courseId) { showAlert("bad","Please select a course to continue."); return false; }
+      return true;
+    }
+    if (n === 2){
+      if (!state.schoolYear || !state.yearLevel){
+        showAlert("bad","Please select both school year and year level.");
+        return false;
+      }
+      return true;
+    }
+    if (n === 3){
+      if (!state.selected.length){
+        showAlert("bad","Please select at least 1 subject.");
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }
+
+  // ===== Events =====
+  renderCourses();
+
+  courseSelect.addEventListener("change", () => {
+    state.courseId = courseSelect.value;
+    state.selected = [];
+    clearAlert();
+    if (state.courseId){
+      showAlert("ok", `Course selected: ${courseName(state.courseId)}`);
+    } else {
+      clearAlert();
+    }
+  });
+
+  schoolYearSelect.addEventListener("change", () => state.schoolYear = schoolYearSelect.value);
+  yearLevelSelect.addEventListener("change", () => state.yearLevel = yearLevelSelect.value);
+
+  dayFilter.addEventListener("change", renderAvailable);
+  searchBox.addEventListener("input", renderAvailable);
+
+  btnPrev.addEventListener("click", () => setStep(Math.max(1, step-1)));
+
+  btnNext.addEventListener("click", () => {
+    if (!stepValid(step)) return;
+
+    if (step < 4){
+      setStep(step+1);
+      return;
+    }
+
+    const payload = {
+      studentNumber: ueStudentNumber,
+      email: ueEmail,
+      courseId: state.courseId,
+      courseName: courseName(state.courseId),
+      schoolYear: state.schoolYear,
+      yearLevel: state.yearLevel,
+      subjects: state.selected,
+      submittedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem(enrollmentKey(), JSON.stringify(payload));
+    localStorage.setItem("ue_last_enrollment_at", payload.submittedAt);
+
+    showAlert("ok", "Enrollment submitted successfully! Redirecting to dashboard...");
+    setTimeout(() => window.location.href = "dashboard.html", 900);
+  });
+
+  // Default step
+  setStep(1);
+</script>
+</body>
+</html>

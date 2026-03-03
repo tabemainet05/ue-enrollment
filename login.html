@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>University of the East • Student Enrollment System</title>
+
+<style>
+:root{
+  --brand:#cf0a0a;
+  --text:#0f172a;
+  --muted:#64748b;
+  --danger:#dc2626;
+  --success:#16a34a;
+  --card:rgba(255,255,255,0.95);
+  --radius:20px;
+  --shadow:0 25px 60px rgba(0,0,0,.25);
+  --font:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:var(--font);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+
+  /* BACKGROUND IMAGE */
+  background:
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("https://www.ue.edu.ph/mla/wp-content/uploads/2023/04/uesocialogp.png")
+    center/cover no-repeat fixed;
+}
+
+/* Optional subtle blur effect */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  backdrop-filter: blur(6px);
+  z-index:-1;
+}
+
+.layout{
+  max-width:1100px;
+  width:100%;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:28px;
+}
+
+/* LEFT SIDE */
+.brand{
+  padding:30px;
+  color:#fff;
+}
+
+.logo{
+  width:85px;
+  height:85px;
+  border-radius:20px;
+  background:var(--brand);
+  display:grid;
+  place-items:center;
+  margin-bottom:20px;
+  box-shadow:0 15px 35px rgba(207,10,10,.45);
+}
+
+.logo img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px; /* gives the seal breathing room */
+}
+
+.logo svg{width:45px;height:45px}
+
+h1{
+  margin:0;
+  font-size:48px;
+  line-height:1.05;
+  font-weight:800;
+}
+
+.subtitle{
+  margin-top:10px;
+  font-size:16px;
+  opacity:.9;
+}
+
+/* FORM CARD */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:34px;
+}
+
+.card h2{
+  margin:0;
+  font-size:30px;
+}
+
+.card p{
+  margin:6px 0 24px;
+  color:var(--muted);
+}
+
+.field{
+  margin-bottom:18px;
+}
+
+label{
+  display:block;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.control{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1.5px solid #cbd5e1;
+  background:#fff;
+  transition:.15s;
+}
+
+.control:focus-within{
+  border-color:var(--brand);
+  box-shadow:0 0 0 5px rgba(207,10,10,.2);
+}
+
+.control.invalid{
+  border-color:var(--danger);
+}
+
+.control.valid{
+  border-color:var(--success);
+}
+
+.icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:#f1f5f9;
+}
+
+input{
+  border:none;
+  outline:none;
+  width:100%;
+  font-size:15px;
+}
+
+.error{
+  margin-top:6px;
+  font-size:12.5px;
+  color:var(--danger);
+  display:none;
+  font-weight:600;
+}
+
+button{
+  width:100%;
+  margin-top:10px;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--brand),#ff2d2d);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(207,10,10,.4);
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.footer{
+  margin-top:18px;
+  padding-top:14px;
+  border-top:1px solid #e5e7eb;
+  text-align:center;
+  font-size:13px;
+}
+
+.footer a{
+  color:var(--brand);
+  font-weight:700;
+  text-decoration:none;
+}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  h1{font-size:38px}
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+  <section class="brand">
+    <div class="logo">
+        <img src="University_of_the_East_seal.png" alt="University of the East Seal">
+    </div>
+    <h1>University of the East</h1>
+    <div class="subtitle">Student Enrollment System</div>
+  </section>
+
+  <section class="card">
+    <h2>Welcome Back!</h2>
+    <p>Sign in with your UE credentials to continue</p>
+
+    <form id="loginForm" novalidate>
+
+      <div class="field">
+        <label>UE Email Address *</label>
+        <div class="control" id="emailCtrl">   
+          <input id="email" placeholder="name@ue.edu.ph" required />
+        </div>
+        <div class="error" id="emailErr">
+          Please use your official UE email (@ue.edu.ph)
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Student Number *</label>
+        <div class="control" id="studCtrl">
+
+          <input id="studentNumber" placeholder="Enter your student number" required />
+        </div>
+        <div class="error" id="studErr">
+          Student number is required
+        </div>
+      </div>
+      <button id="submitBtn" disabled>Sign In to UE Portal</button>
+
+      <div class="footer">
+        Need help? Contact <a href="mailto:registrar@ue.edu.ph">registrar@ue.edu.ph</a>
+      </div>
+    </form>
+  </section>
+
+</div>
+
+<script>
+const email = document.getElementById("email");
+const student = document.getElementById("studentNumber");
+const submitBtn = document.getElementById("submitBtn");
+
+const emailCtrl = document.getElementById("emailCtrl");
+const studCtrl = document.getElementById("studCtrl");
+
+const emailErr = document.getElementById("emailErr");
+const studErr = document.getElementById("studErr");
+
+function validEmail() {
+  const ok = email.value.trim().toLowerCase().endsWith("@ue.edu.ph");
+  emailCtrl.classList.toggle("invalid", !ok && email.value);
+  emailCtrl.classList.toggle("valid", ok);
+  emailErr.style.display = ok || !email.value ? "none" : "block";
+  return ok;
+}
+
+function validStudent() {
+  const ok = student.value.trim().length > 0;
+  studCtrl.classList.toggle("invalid", !ok && student.value);
+  studCtrl.classList.toggle("valid", ok);
+  studErr.style.display = ok || !student.value ? "none" : "block";
+  return ok;
+}
+
+function validate() {
+  submitBtn.disabled = !(validEmail() && validStudent());
+}
+
+email.addEventListener("input", validate);
+student.addEventListener("input", validate);
+
+document.getElementById("loginForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  validate();
+
+  if (submitBtn.disabled) return;
+
+  // ✅ Save what the student used to log in
+  const emailVal = email.value.trim();
+  const studentVal = student.value.trim();
+
+  localStorage.setItem("ue_email", emailVal);
+  localStorage.setItem("ue_studentNumber", studentVal);
+
+  // ✅ Redirect to the student dashboard page
+  window.location.href = "dashboard.html";
+});
+
+// Initialize
+validate();
+</script>
+</body>
+</html>
