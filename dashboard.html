@@ -4,281 +4,208 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>UE • My Enrolled Subjects</title>
-
 <style>
-  :root{
-    --brand:#cf0a0a;
-    --brand2:#ff2d2d;
-    --text:#0f172a;
-    --muted:#64748b;
-    --bg:#fbfbfc;
-    --surface:#fff;
-    --border:rgba(15,23,42,.10);
-    --shadow:0 18px 45px rgba(2,6,23,.10);
-    --shadow-soft:0 10px 22px rgba(2,6,23,.07);
-    --radius:18px;
-    --font: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-  }
+:root{
+  --brand:#cf0a0a;--brand2:#ff2d2d;--text:#0f172a;
+  --muted:#64748b;--bg:#fbfbfc;--surface:#fff;
+  --border:rgba(15,23,42,.10);
+  --shadow:0 18px 45px rgba(2,6,23,.10);
+  --shadow-soft:0 10px 22px rgba(2,6,23,.07);
+  --radius:18px;
+  --font:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font);color:var(--text);
+  background:
+    radial-gradient(900px 520px at 18% -10%,rgba(207,10,10,.10),transparent 60%),
+    radial-gradient(900px 520px at 92% 0%,rgba(207,10,10,.06),transparent 55%),
+    var(--bg);
+  min-height:100vh;
+}
 
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:var(--font);
-    color:var(--text);
-    background:
-      radial-gradient(900px 520px at 18% -10%, rgba(207,10,10,.10), transparent 60%),
-      radial-gradient(900px 520px at 92% 0%, rgba(207,10,10,.06), transparent 55%),
-      var(--bg);
-    min-height:100vh;
-  }
+/* ── Topbar ── */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-inner{
+  max-width:1200px;margin:0 auto;
+  padding:12px 16px;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand .logo{
+  width:50px;height:50px;border-radius:14px;
+  background:var(--brand);
+  box-shadow:0 10px 24px rgba(207,10,10,.22);
+  display:grid;place-items:center;overflow:hidden;flex:0 0 auto;
+}
+.brand .logo img{width:100%;height:100%;object-fit:contain;padding:5px;}
+.brand .title{display:flex;flex-direction:column;line-height:1.15;}
+.brand .title strong{font-size:15px;color:var(--brand);letter-spacing:-.01em;}
+.brand .title span{font-size:12px;color:var(--muted);}
 
-  /* ===== Top nav ===== */
-  .topbar{
-    position:sticky; top:0; z-index:20;
-    background:rgba(255,255,255,.90);
-    backdrop-filter: blur(12px);
-    border-bottom:1px solid var(--border);
-  }
-  .topbar-inner{
-    max-width:1200px;
-    margin:0 auto;
-    padding:14px 18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-  }
+.nav-actions{display:flex;align-items:center;gap:8px;}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:999px;
+  border:1px solid rgba(15,23,42,.08);
+  background:#f3f4f6;color:#0f172a;
+  font-weight:700;font-size:13px;text-decoration:none;transition:.15s;
+  white-space:nowrap;
+}
+.pill:hover{filter:brightness(.97);}
+.pill.primary{
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+  border-color:transparent;color:#fff;
+  box-shadow:0 10px 22px rgba(207,10,10,.18);
+}
+.pill svg{width:16px;height:16px;flex:0 0 auto;}
+.pill .lbl{display:inline;}
 
-  .brand{
-    display:flex; align-items:center; gap:12px;
-  }
-  .brand .logo{
-    width:56px; height:56px;
-    border-radius:16px;
-    background:var(--brand);
-    box-shadow:0 14px 30px rgba(207,10,10,.25);
-    display:grid;
-    place-items:center;
-    overflow:hidden;
-    flex:0 0 auto;
-  }
-  .brand .logo img{
-    width:100%; height:100%;
-    object-fit:contain;
-    padding:6px;
-    background:transparent;
-  }
-  .brand .title{
-    display:flex; flex-direction:column; line-height:1.1;
-  }
-  .brand .title strong{
-    font-size:16px;
-    color:var(--brand);
-    letter-spacing:-.01em;
-  }
-  .brand .title span{
-    font-size:12.5px;
-    color:var(--muted);
-  }
+.red-line{
+  height:3px;
+  background:linear-gradient(90deg,var(--brand),rgba(207,10,10,.25),transparent);
+}
 
-  .nav-actions{
-    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-  }
-  .pill{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:12px 16px;
-    border-radius:999px;
-    border:1px solid rgba(15,23,42,.08);
-    background:#f3f4f6;
-    color:#0f172a;
-    font-weight:700;
-    font-size:14px;
-    text-decoration:none;
-    transition:.15s;
-  }
-  .pill:hover{ filter:brightness(.98); }
-  .pill.primary{
-    background:linear-gradient(135deg,var(--brand),var(--brand2));
-    border-color:transparent;
-    color:#fff;
-    box-shadow:0 14px 26px rgba(207,10,10,.18);
-  }
-  .pill svg{ width:18px; height:18px; }
+/* ── Page ── */
+.container{max-width:1200px;margin:0 auto;padding:20px 16px 48px;}
+h1{
+  margin:16px 0 6px;
+  font-size:clamp(26px,5vw,40px);
+  letter-spacing:-.02em;color:var(--brand);
+}
+.subtext{color:var(--muted);font-size:15px;margin-bottom:2px;}
 
-  .red-line{
-    height:3px;
-    background:linear-gradient(90deg,var(--brand), rgba(207,10,10,.25), transparent);
-  }
+/* ── Student card ── */
+.student-card{
+  margin-top:14px;
+  background:linear-gradient(135deg,var(--brand),#b30000);
+  border-radius:20px;
+  box-shadow:0 18px 40px rgba(207,10,10,.18);
+  padding:20px;color:#fff;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.student-card .icon{
+  width:64px;height:64px;border-radius:999px;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.18);
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.student-card .icon svg{width:30px;height:30px;}
+.student-card .info{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.student-card .info strong{font-size:20px;letter-spacing:-.01em;}
+.student-card .info .line{font-size:14px;opacity:.95;overflow-wrap:break-word;word-break:break-all;}
 
-  /* ===== Page header ===== */
-  .container{
-    max-width:1200px;
-    margin:0 auto;
-    padding:22px 18px 46px;
-  }
-  h1{
-    margin:18px 0 6px;
-    font-size:42px;
-    letter-spacing:-.02em;
-    color:var(--brand);
-  }
-  .subtext{
-    margin:0 0 18px;
-    color:var(--muted);
-    font-size:16px;
-  }
+/* ── Stats ── */
+.stats{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.stat{
+  background:var(--surface);
+  border:1px solid rgba(207,10,10,.18);
+  border-radius:16px;
+  box-shadow:var(--shadow-soft);
+  padding:16px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.stat .meta{display:flex;flex-direction:column;gap:8px;}
+.stat .meta span{color:#334155;font-weight:700;font-size:13px;}
+.stat .meta strong{
+  font-size:clamp(26px,4vw,42px);
+  letter-spacing:-.02em;color:var(--brand);line-height:1;
+}
+.stat .meta strong.small{font-size:clamp(15px,3vw,22px);}
+.stat .bubble{
+  width:50px;height:50px;border-radius:13px;
+  background:#fdecec;display:grid;place-items:center;
+  border:1px solid rgba(207,10,10,.14);color:var(--brand);flex:0 0 auto;
+}
+.stat .bubble svg{width:22px;height:22px;}
+.stat:nth-child(2){border-color:rgba(245,158,11,.35);}
+.stat:nth-child(2) .bubble{background:#fff7e6;color:#b45309;border-color:rgba(245,158,11,.18);}
 
-  /* ===== Student info card (red banner) ===== */
-  .student-card{
-    margin-top:14px;
-    background:linear-gradient(135deg,var(--brand), #b30000);
-    border-radius:20px;
-    box-shadow:0 18px 40px rgba(207,10,10,.18);
-    padding:22px;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    gap:16px;
-  }
-  .student-card .icon{
-    width:72px; height:72px;
-    border-radius:999px;
-    background:rgba(255,255,255,.16);
-    border:1px solid rgba(255,255,255,.18);
-    display:grid;
-    place-items:center;
-    flex:0 0 auto;
-  }
-  .student-card .icon svg{ width:34px; height:34px; }
-  .student-card .info{
-    display:flex; flex-direction:column; gap:6px;
-    min-width:0;
-  }
-  .student-card .info strong{
-    font-size:22px;
-    letter-spacing:-.01em;
-  }
-  .student-card .info .line{
-    font-size:15px;
-    opacity:.95;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
+/* ── Panel ── */
+.panel{
+  margin-top:16px;
+  background:var(--surface);
+  border:1px solid rgba(207,10,10,.20);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  min-height:260px;
+  display:flex;align-items:center;justify-content:center;
+  padding:28px 16px;
+}
+.empty{
+  text-align:center;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.empty .mark{
+  width:62px;height:62px;border-radius:999px;
+  display:grid;place-items:center;
+  background:#fdecec;border:3px solid rgba(207,10,10,.35);color:var(--brand);
+}
+.empty .mark svg{width:26px;height:26px;}
+.empty strong{font-size:20px;color:#0f172a;}
 
-  /* ===== Stats cards ===== */
-  .stats{
-    margin-top:18px;
-    display:grid;
-    grid-template-columns:repeat(3, minmax(0, 1fr));
-    gap:16px;
-  }
-  .stat{
-    background:var(--surface);
-    border:1px solid rgba(207,10,10,.18);
-    border-radius:18px;
-    box-shadow:var(--shadow-soft);
-    padding:18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
-  .stat .meta{
-    display:flex; flex-direction:column; gap:10px;
-  }
-  .stat .meta span{
-    color:#334155;
-    font-weight:700;
-    font-size:14px;
-  }
-  .stat .meta strong{
-    font-size:42px;
-    letter-spacing:-.02em;
-    color:var(--brand);
-    line-height:1;
-  }
-  .stat .meta strong.small{
-    font-size:22px;
-  }
-  .stat .bubble{
-    width:54px; height:54px;
-    border-radius:14px;
-    background:#fdecec;
-    display:grid;
-    place-items:center;
-    border:1px solid rgba(207,10,10,.14);
-    color:var(--brand);
-    flex:0 0 auto;
-  }
-  .stat:nth-child(2){
-    border-color: rgba(245,158,11,.35);
-  }
-  .stat:nth-child(2) .bubble{
-    background:#fff7e6;
-    color:#b45309;
-    border-color: rgba(245,158,11,.18);
-  }
+/* ── Enrolled table ── */
+.table-wrap{overflow-x:auto;border-radius:14px;border:1px solid rgba(15,23,42,.10);}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  text-align:left;padding:12px 14px;
+  font-size:12px;font-weight:800;
+  background:#f8fafc;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  white-space:nowrap;
+}
+tbody td{padding:12px 14px;border-bottom:1px solid rgba(15,23,42,.08);font-size:14px;}
+tbody tr:last-child td{border-bottom:none;}
 
-  /* ===== Empty panel ===== */
-  .panel{
-    margin-top:18px;
-    background:var(--surface);
-    border:1px solid rgba(207,10,10,.20);
-    border-radius:20px;
-    box-shadow:var(--shadow);
-    min-height:280px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:30px 18px;
-  }
-  .empty{
-    text-align:center;
-    color:var(--muted);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
-  }
-  .empty .mark{
-    width:66px; height:66px;
-    border-radius:999px;
-    display:grid;
-    place-items:center;
-    background:#fdecec;
-    border:3px solid rgba(207,10,10,.35);
-    color:var(--brand);
-  }
-  .empty .mark svg{ width:28px; height:28px; }
-  .empty strong{
-    font-size:22px;
-    color:#0f172a;
-  }
+/* Mobile card-style table */
+@media(max-width:600px){
+  thead{display:none;}
+  table,tbody,tr,td{display:block;width:100%;}
+  tbody tr{padding:14px;border-bottom:1px solid rgba(15,23,42,.08);}
+  tbody td{border:none;padding:3px 0;font-size:13.5px;}
+  tbody td:nth-child(1){font-weight:900;font-size:14px;color:var(--brand);}
+  tbody td:nth-child(2)::before{content:"Subject: ";font-weight:700;color:#475569;}
+  tbody td:nth-child(3)::before{content:"Schedule: ";font-weight:700;color:#475569;}
+  tbody td:nth-child(4)::before{content:"Professor: ";font-weight:700;color:#475569;}
+}
 
-  @media (max-width: 980px){
-    h1{ font-size:34px; }
-    .stats{ grid-template-columns:1fr; }
-    .student-card{ flex-direction:row; }
-  }
+/* ── Breakpoints ── */
+@media(max-width:820px){
+  .stats{grid-template-columns:1fr 1fr;}
+  .stat:nth-child(3){grid-column:span 2;}
+}
+@media(max-width:540px){
+  .stats{grid-template-columns:1fr;}
+  .stat:nth-child(3){grid-column:auto;}
+  .pill .lbl{display:none;}
+  .pill{padding:9px 11px;}
+  .brand .title strong{font-size:13px;}
+  .brand .title span{display:none;}
+}
 </style>
 </head>
-
 <body>
+
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <div class="logo">
-        <img src="University_of_the_East_seal.png" alt="University of the East Seal">
-      </div>
+      <div class="logo"><img src="University_of_the_East_seal.png" alt="UE Seal"></div>
       <div class="title">
         <strong>University of the East</strong>
         <span>Student Enrollment Portal</span>
       </div>
     </div>
-
     <nav class="nav-actions">
       <a class="pill" href="#" id="btnEnrollSubject">
         <svg viewBox="0 0 24 24" fill="none">
@@ -287,23 +214,21 @@
           <path d="M19 8v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           <path d="M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        Enroll Subject
+        <span class="lbl">Enroll Subject</span>
       </a>
-
       <a class="pill primary" href="#">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M10 3H3v7h7V3ZM21 3h-7v7h7V3ZM10 14H3v7h7v-7ZM21 14h-7v7h7v-7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
         </svg>
-        My Subjects
+        <span class="lbl">My Subjects</span>
       </a>
-
       <a class="pill" href="#" id="btnLogout">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           <path d="M21 21V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        Logout
+        <span class="lbl">Logout</span>
       </a>
     </nav>
   </div>
@@ -334,20 +259,19 @@
         <span>Total Subjects</span>
         <strong id="totalSubjects">0</strong>
       </div>
-      <div class="bubble" aria-hidden="true">
+      <div class="bubble">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M4 19a2 2 0 0 0 2 2h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           <path d="M6 2h14v18H6a2 2 0 0 0-2 2V4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
         </svg>
       </div>
     </article>
-
     <article class="stat">
       <div class="meta">
         <span>Current Semester</span>
         <strong id="currentSemester">0</strong>
       </div>
-      <div class="bubble" aria-hidden="true">
+      <div class="bubble">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M3 8h18v13H3V8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
           <path d="M8 3v3M16 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -355,13 +279,12 @@
         </svg>
       </div>
     </article>
-
     <article class="stat">
       <div class="meta">
         <span>Latest Enrollment</span>
         <strong class="small" id="latestEnrollment">N/A</strong>
       </div>
-      <div class="bubble" aria-hidden="true">
+      <div class="bubble">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
           <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -370,162 +293,89 @@
     </article>
   </section>
 
-<section class="panel" id="enrollPanel">
-  <!-- EMPTY STATE (default) -->
-  <div class="empty" id="emptyState">
-    <div class="mark" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M12 9v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M10.3 3.3 1.9 18a2 2 0 0 0 1.8 3h16.6a2 2 0 0 0 1.8-3L13.7 3.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <strong>No Subjects Enrolled Yet</strong>
-    <div>Start by enrolling in your first subject!</div>
-  </div>
-
-  <!-- ENROLLED TABLE (hidden until there is data) -->
-  <div id="enrolledState" style="display:none; width:100%;">
-    <div style="width:100%; max-width:1100px;">
-      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding:4px 6px 14px;">
-        <div>
-          <div style="font-weight:900; color:#0f172a; font-size:18px;">Enrolled Subjects</div>
-          <div style="color:var(--muted); font-size:13px;">Your current selections are listed below.</div>
-        </div>
-        <button id="btnEditEnrollment" style="
-          border:1px solid rgba(15,23,42,.12);
-          background:#f8fafc;
-          padding:10px 14px;
-          border-radius:14px;
-          font-weight:800;
-          cursor:pointer;
-        ">Edit Enrollment</button>
+  <section class="panel" id="enrollPanel">
+    <div class="empty" id="emptyState">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 9v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M10.3 3.3 1.9 18a2 2 0 0 0 1.8 3h16.6a2 2 0 0 0 1.8-3L13.7 3.3a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
       </div>
+      <strong>No Subjects Enrolled Yet</strong>
+      <div>Start by enrolling in your first subject!</div>
+    </div>
 
-      <div style="overflow:auto; border:1px solid rgba(15,23,42,.10); border-radius:16px; background:#fff;">
-        <table style="width:100%; border-collapse:separate; border-spacing:0;">
+    <div id="enrolledState" style="display:none;width:100%;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:4px 4px 14px;flex-wrap:wrap;">
+        <div>
+          <div style="font-weight:900;color:#0f172a;font-size:17px;">Enrolled Subjects</div>
+          <div style="color:var(--muted);font-size:13px;">Your current selections are listed below.</div>
+        </div>
+        <button id="btnEditEnrollment" style="border:1px solid rgba(15,23,42,.12);background:#f8fafc;padding:10px 14px;border-radius:14px;font-weight:800;cursor:pointer;font-size:13px;white-space:nowrap;">Edit Enrollment</button>
+      </div>
+      <div class="table-wrap">
+        <table>
           <thead>
-            <tr style="background:#f8fafc;">
-              <th style="text-align:left; padding:12px; font-size:12px; border-bottom:1px solid rgba(15,23,42,.08);">Code</th>
-              <th style="text-align:left; padding:12px; font-size:12px; border-bottom:1px solid rgba(15,23,42,.08);">Subject</th>
-              <th style="text-align:left; padding:12px; font-size:12px; border-bottom:1px solid rgba(15,23,42,.08);">Schedule</th>
-              <th style="text-align:left; padding:12px; font-size:12px; border-bottom:1px solid rgba(15,23,42,.08);">Professor</th>
-            </tr>
+            <tr><th>Code</th><th>Subject</th><th>Schedule</th><th>Professor</th></tr>
           </thead>
           <tbody id="enrolledTbody"></tbody>
         </table>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
+
 <script>
-  // ✅ Read login credentials saved from login.html
-  const email = localStorage.getItem("ue_email") || "";
-  const studentNumber = localStorage.getItem("ue_studentNumber") || "";
-
-  // ✅ If no login data, send back to login page
-  if (!email || !studentNumber) {
-    window.location.href = "login.html";
-  } else {
-    document.getElementById("emailLine").textContent = "Email: " + email;
-    document.getElementById("studentLine").textContent = "Student Number: " + studentNumber;
+const email=localStorage.getItem("ue_email")||"";
+const studentNumber=localStorage.getItem("ue_studentNumber")||"";
+if(!email||!studentNumber){window.location.href="login.html";}
+else{
+  document.getElementById("emailLine").textContent="Email: "+email;
+  document.getElementById("studentLine").textContent="Student Number: "+studentNumber;
+}
+document.getElementById("btnEnrollSubject").addEventListener("click",e=>{e.preventDefault();window.location.href="enrollment.html";});
+document.getElementById("btnLogout").addEventListener("click",e=>{
+  e.preventDefault();
+  localStorage.removeItem("ue_email");localStorage.removeItem("ue_studentNumber");
+  window.location.href="login.html";
+});
+function enrollmentKey(){return`ue_enrollment_${studentNumber}`;}
+function formatDateNice(iso){
+  if(!iso)return"N/A";const d=new Date(iso);
+  if(isNaN(d.getTime()))return"N/A";
+  return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"2-digit"});
+}
+function renderEnrollment(){
+  const raw=localStorage.getItem(enrollmentKey());
+  const emptyState=document.getElementById("emptyState");
+  const enrolledState=document.getElementById("enrolledState");
+  const tbody=document.getElementById("enrolledTbody");
+  if(!raw){
+    document.getElementById("totalSubjects").textContent="0";
+    document.getElementById("currentSemester").textContent="0";
+    document.getElementById("latestEnrollment").textContent="N/A";
+    emptyState.style.display="flex";enrolledState.style.display="none";return;
   }
-
-  // ✅ Hook Enroll Subject button to enroll.html
-  document.getElementById("btnEnrollSubject").addEventListener("click", (e) => {
-    e.preventDefault();
-    window.location.href = "enrollment.html";
+  let data;try{data=JSON.parse(raw);}catch{localStorage.removeItem(enrollmentKey());renderEnrollment();return;}
+  const subjects=Array.isArray(data.subjects)?data.subjects:[];
+  document.getElementById("totalSubjects").textContent=String(subjects.length);
+  document.getElementById("currentSemester").textContent=data.schoolYear?`SY ${data.schoolYear}`:"0";
+  document.getElementById("latestEnrollment").textContent=formatDateNice(data.submittedAt);
+  emptyState.style.display="none";enrolledState.style.display="block";
+  tbody.innerHTML="";
+  subjects.forEach(s=>{
+    const schedule=s?.schedule?`${s.schedule.day} ${s.schedule.start}–${s.schedule.end}`:"—";
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td style="font-weight:900;">${s.code||"—"}</td>
+      <td><div style="font-weight:900;">${s.name||"—"}</div><div style="color:var(--muted);font-size:12px;">${data.courseId||""}</div></td>
+      <td>${schedule}</td><td>${s.prof||"—"}</td>`;
+    tbody.appendChild(tr);
   });
-
-  // ✅ Logout clears saved login
-  document.getElementById("btnLogout").addEventListener("click", (e) => {
-    e.preventDefault();
-    localStorage.removeItem("ue_email");
-    localStorage.removeItem("ue_studentNumber");
-    window.location.href = "login.html";
-  });
-
-  // ===== Enrollment rendering =====
-  function enrollmentKey() {
-    return `ue_enrollment_${studentNumber}`;
-  }
-
-  function formatDateNice(isoString) {
-    if (!isoString) return "N/A";
-    const d = new Date(isoString);
-    if (isNaN(d.getTime())) return "N/A";
-    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
-  }
-
-  function computeSemesterLabel(schoolYear) {
-    // simple label (you can improve later)
-    // example: "2025–2026" -> "SY 2025–2026"
-    return schoolYear ? `SY ${schoolYear}` : "0";
-  }
-
-  function renderEnrollment() {
-    const raw = localStorage.getItem(enrollmentKey());
-    const emptyState = document.getElementById("emptyState");
-    const enrolledState = document.getElementById("enrolledState");
-    const tbody = document.getElementById("enrolledTbody");
-
-    if (!raw) {
-      // No enrollment -> keep empty
-      document.getElementById("totalSubjects").textContent = "0";
-      document.getElementById("currentSemester").textContent = "0";
-      document.getElementById("latestEnrollment").textContent = "N/A";
-      emptyState.style.display = "flex";
-      enrolledState.style.display = "none";
-      return;
-    }
-
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      // corrupted data -> treat as empty
-      localStorage.removeItem(enrollmentKey());
-      renderEnrollment();
-      return;
-    }
-
-    const subjects = Array.isArray(data.subjects) ? data.subjects : [];
-
-    // Stats
-    document.getElementById("totalSubjects").textContent = String(subjects.length);
-    document.getElementById("currentSemester").textContent = computeSemesterLabel(data.schoolYear);
-    document.getElementById("latestEnrollment").textContent = formatDateNice(data.submittedAt);
-
-    // Panel
-    emptyState.style.display = "none";
-    enrolledState.style.display = "block";
-
-    // Table rows
-    tbody.innerHTML = "";
-    subjects.forEach(s => {
-      const schedule = s?.schedule ? `${s.schedule.day} ${s.schedule.start}–${s.schedule.end}` : "—";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td style="padding:12px; border-bottom:1px solid rgba(15,23,42,.08); font-weight:900;">${s.code || "—"}</td>
-        <td style="padding:12px; border-bottom:1px solid rgba(15,23,42,.08);">
-          <div style="font-weight:900;">${s.name || "—"}</div>
-          <div style="color:var(--muted); font-size:12px;">${data.courseId || ""}</div>
-        </td>
-        <td style="padding:12px; border-bottom:1px solid rgba(15,23,42,.08);">${schedule}</td>
-        <td style="padding:12px; border-bottom:1px solid rgba(15,23,42,.08);">${s.prof || "—"}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // Edit Enrollment button
-    document.getElementById("btnEditEnrollment").onclick = () => {
-      window.location.href = "enrollment.html";
-    };
-  }
-
-  // Render on load
-  renderEnrollment();
+  document.getElementById("btnEditEnrollment").onclick=()=>{window.location.href="enrollment.html";};
+}
+renderEnrollment();
 </script>
-
 </body>
 </html>
