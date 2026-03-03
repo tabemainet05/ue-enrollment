@@ -6,285 +6,135 @@
 <title>University of the East • Student Enrollment System</title>
 <style>
 :root{
-  --brand:#8b0000;
-  --brand-mid:#a50000;
-  --brand-light:#cf0a0a;
-  --text:#fff;
-  --muted:rgba(255,255,255,.7);
-  --input-bg:rgba(255,255,255,.92);
+  --brand:#cf0a0a;--text:#0f172a;--muted:#64748b;
+  --danger:#dc2626;--success:#16a34a;
+  --card:rgba(255,255,255,0.97);--radius:20px;
+  --shadow:0 25px 60px rgba(0,0,0,.25);
   --font:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;}
 body{
-  min-height:100vh;
-  font-family:var(--font);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  min-height:100vh;font-family:var(--font);
+  display:flex;align-items:center;justify-content:center;
   padding:20px 16px;
-  background:
-    radial-gradient(ellipse at 30% 20%, #c0392b 0%, #7b0000 40%, #4a0000 100%);
+  background:linear-gradient(rgba(0,0,0,.58),rgba(0,0,0,.58)),
+    url("https://www.ue.edu.ph/mla/wp-content/uploads/2023/04/uesocialogp.png")
+    center/cover no-repeat fixed;
 }
-
-/* ── Layout ── */
+body::before{content:"";position:fixed;inset:0;backdrop-filter:blur(5px);z-index:-1;}
 .layout{
   max-width:1060px;width:100%;
-  display:grid;
-  grid-template-columns:1.2fr 0.8fr;
-  gap:40px;
-  align-items:center;
+  display:grid;grid-template-columns:1.15fr .85fr;
+  gap:28px;align-items:center;
 }
-
-/* ── Brand (left) ── */
-.brand{
-  color:#fff;
-  display:flex;flex-direction:column;align-items:flex-start;gap:16px;
-}
+.brand{padding:20px;color:#fff;}
 .logo{
-  width:100px;height:100px;border-radius:50%;
-  background:rgba(255,255,255,.12);
-  border:3px solid rgba(255,255,255,.3);
-  display:grid;place-items:center;overflow:hidden;
-  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  width:88px;height:88px;border-radius:22px;
+  background:var(--brand);display:grid;place-items:center;
+  margin-bottom:22px;box-shadow:0 16px 38px rgba(207,10,10,.45);overflow:hidden;
 }
-.logo img{width:100%;height:100%;object-fit:contain;padding:8px;}
-.brand h1{
-  font-size:clamp(26px,4vw,44px);
-  font-weight:900;
-  line-height:1.05;
-  text-shadow:0 2px 8px rgba(0,0,0,.4);
+.logo img{width:100%;height:100%;object-fit:contain;padding:7px;}
+h1{font-size:clamp(28px,5vw,48px);line-height:1.05;font-weight:800;}
+.subtitle{margin-top:10px;font-size:16px;opacity:.9;}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:32px 28px;}
+.card h2{font-size:28px;margin-bottom:6px;}
+.card p{color:var(--muted);margin-bottom:24px;font-size:14.5px;}
+.field{margin-bottom:18px;}
+label{display:block;font-weight:600;margin-bottom:8px;font-size:14px;}
+.control{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;border-radius:14px;
+  border:1.5px solid #cbd5e1;background:#fff;transition:.15s;
 }
-.brand .subtitle{
-  font-size:15px;
-  color:rgba(255,255,255,.8);
-  font-weight:500;
+.control:focus-within{border-color:var(--brand);box-shadow:0 0 0 4px rgba(207,10,10,.18);}
+.control.invalid{border-color:var(--danger);}
+.control.valid{border-color:var(--success);}
+input{border:none;outline:none;width:100%;font-size:15px;min-width:0;}
+.error{margin-top:6px;font-size:12.5px;color:var(--danger);display:none;font-weight:600;}
+button{
+  width:100%;margin-top:10px;padding:14px;border:none;border-radius:16px;
+  background:linear-gradient(135deg,var(--brand),#ff2d2d);
+  color:#fff;font-size:16px;font-weight:700;cursor:pointer;
+  box-shadow:0 12px 28px rgba(207,10,10,.38);
 }
+button:disabled{opacity:.55;cursor:not-allowed;}
+.footer{margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb;text-align:center;font-size:13px;}
+.footer a{color:var(--brand);font-weight:700;text-decoration:none;}
 
-/* ── Login box ── */
-.login-box{
-  background:linear-gradient(160deg, #9b1010 0%, #6b0000 60%, #4a0000 100%);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:14px;
-  padding:28px 24px 22px;
-  box-shadow:
-    0 24px 60px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.1);
+/* Tablet */
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr;max-width:480px;}
+  .brand{text-align:center;padding:10px 20px 0;}
+  .logo{margin:0 auto 18px;}
 }
-
-/* Fields */
-.field{
-  margin-bottom:16px;
-}
-.field label{
-  display:block;
-  color:#fff;
-  font-weight:700;
-  font-size:14px;
-  margin-bottom:6px;
-  text-align:center;
-  text-shadow:0 1px 3px rgba(0,0,0,.4);
-}
-.field input{
-  width:100%;
-  padding:10px 12px;
-  border-radius:6px;
-  border:2px solid rgba(255,255,255,.25);
-  background:var(--input-bg);
-  color:#1a0000;
-  font-size:15px;
-  outline:none;
-  transition:.15s;
-  font-family:var(--font);
-}
-.field input:focus{
-  border-color:rgba(255,255,255,.7);
-  box-shadow:0 0 0 3px rgba(255,255,255,.15);
-}
-.field .hint{
-  text-align:center;
-  color:rgba(255,255,255,.65);
-  font-size:12px;
-  margin-top:5px;
-}
-
-/* Error */
-.error{
-  color:#ffb3b3;
-  font-size:12px;
-  font-weight:700;
-  text-align:center;
-  margin-top:5px;
-  display:none;
-}
-
-/* ── Buttons ── */
-.btn-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:20px;
-}
-.btn{
-  padding:11px 10px;
-  border:2px solid rgba(255,255,255,.35);
-  border-radius:7px;
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  font-size:14px;
-  font-weight:800;
-  cursor:pointer;
-  transition:.15s;
-  text-align:center;
-  backdrop-filter:blur(4px);
-  letter-spacing:.01em;
-}
-.btn:hover{
-  background:rgba(255,255,255,.22);
-  border-color:rgba(255,255,255,.55);
-}
-.btn:active{
-  background:rgba(255,255,255,.08);
-  transform:scale(.98);
-}
-.btn:disabled{
-  opacity:.45;cursor:not-allowed;
-}
-.btn.free{
-  background:rgba(220,220,220,.18);
-}
-.btn.block{
-  background:rgba(220,220,220,.18);
-}
-
-/* footer link */
-.box-footer{
-  margin-top:16px;
-  text-align:center;
-  font-size:12px;
-  color:rgba(255,255,255,.55);
-}
-.box-footer a{color:rgba(255,180,180,.9);text-decoration:none;font-weight:700;}
-
-/* ── Responsive ── */
-@media(max-width:820px){
-  .layout{grid-template-columns:1fr;max-width:420px;gap:24px;}
-  .brand{align-items:center;text-align:center;}
-}
+/* Phone */
 @media(max-width:480px){
-  body{padding:24px 14px;align-items:flex-start;padding-top:32px;}
-  .login-box{padding:22px 18px 18px;}
-  .brand h1{font-size:24px;}
-  .logo{width:80px;height:80px;}
+  body{padding:28px 12px;align-items:flex-start;}
+  .card{padding:24px 18px;}
+  .card h2{font-size:22px;}
+  h1{font-size:24px;}
+  .logo{width:68px;height:68px;}
+  .brand{padding:8px 12px 0;}
 }
 </style>
 </head>
 <body>
-
 <div class="layout">
-
-  <!-- Brand -->
   <section class="brand">
-    <div class="logo">
-      <img src="University_of_the_East_seal.png" alt="University of the East Seal">
-    </div>
+    <div class="logo"><img src="University_of_the_East_seal.png" alt="UE Seal"></div>
     <h1>University of the East</h1>
     <div class="subtitle">Student Enrollment System</div>
   </section>
-
-  <!-- Login Box -->
-  <div class="login-box">
-
-    <div class="field">
-      <label>Student Number:</label>
-      <input id="studentNumber" type="text" placeholder="" autocomplete="username"/>
-      <div class="error" id="studErr">Student number is required</div>
-    </div>
-
-    <div class="field">
-      <label>Access Code:</label>
-      <input id="accessCode" type="password" placeholder="" autocomplete="current-password"/>
-      <div class="error" id="codeErr">Access code is required</div>
-    </div>
-
-    <div class="field">
-      <label>Date of Birth:<br><span style="font-weight:500;font-size:12px;">(MM/DD/YYYY)</span></label>
-      <input id="dob" type="text" placeholder="" maxlength="10" autocomplete="bday"/>
-      <div class="hint">(Ex. 03/31/1980)</div>
-      <div class="error" id="dobErr">Please enter a valid date (MM/DD/YYYY)</div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn free" id="btnFree">Free Section</button>
-      <button class="btn block" id="btnBlock">Block Section</button>
-    </div>
-
-    <div class="box-footer">
-      Need help? <a href="mailto:registrar@ue.edu.ph">registrar@ue.edu.ph</a>
-    </div>
-  </div>
-
+  <section class="card">
+    <h2>Welcome Back!</h2>
+    <p>Sign in with your UE credentials to continue</p>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label>UE Email Address *</label>
+        <div class="control" id="emailCtrl">
+          <input id="email" type="email" placeholder="name@ue.edu.ph" required autocomplete="email"/>
+        </div>
+        <div class="error" id="emailErr">Please use your official UE email (@ue.edu.ph)</div>
+      </div>
+      <div class="field">
+        <label>Student Number *</label>
+        <div class="control" id="studCtrl">
+          <input id="studentNumber" placeholder="Enter your student number" required autocomplete="username"/>
+        </div>
+        <div class="error" id="studErr">Student number is required</div>
+      </div>
+      <button id="submitBtn" type="submit" disabled>Sign In to UE Portal</button>
+      <div class="footer">Need help? Contact <a href="mailto:registrar@ue.edu.ph">registrar@ue.edu.ph</a></div>
+    </form>
+  </section>
 </div>
-
 <script>
-const studentNumber = document.getElementById("studentNumber");
-const accessCode    = document.getElementById("accessCode");
-const dob           = document.getElementById("dob");
-const btnFree       = document.getElementById("btnFree");
-const btnBlock      = document.getElementById("btnBlock");
-const studErr       = document.getElementById("studErr");
-const codeErr       = document.getElementById("codeErr");
-const dobErr        = document.getElementById("dobErr");
-
-// Auto-format DOB as MM/DD/YYYY while typing
-dob.addEventListener("input", () => {
-  let v = dob.value.replace(/\D/g,"");
-  if(v.length > 2) v = v.slice(0,2)+"/"+v.slice(2);
-  if(v.length > 5) v = v.slice(0,5)+"/"+v.slice(5,9);
-  dob.value = v;
+const email=document.getElementById("email"),student=document.getElementById("studentNumber"),
+  submitBtn=document.getElementById("submitBtn"),emailCtrl=document.getElementById("emailCtrl"),
+  studCtrl=document.getElementById("studCtrl"),emailErr=document.getElementById("emailErr"),
+  studErr=document.getElementById("studErr");
+function validEmail(){
+  const ok=email.value.trim().toLowerCase().endsWith("@ue.edu.ph");
+  emailCtrl.classList.toggle("invalid",!ok&&!!email.value);
+  emailCtrl.classList.toggle("valid",ok);
+  emailErr.style.display=ok||!email.value?"none":"block";return ok;
+}
+function validStudent(){
+  const ok=student.value.trim().length>0;
+  studCtrl.classList.toggle("invalid",!ok&&!!student.value);
+  studCtrl.classList.toggle("valid",ok);
+  studErr.style.display=ok||!student.value?"none":"block";return ok;
+}
+function validate(){submitBtn.disabled=!(validEmail()&&validStudent());}
+email.addEventListener("input",validate);
+student.addEventListener("input",validate);
+document.getElementById("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();validate();if(submitBtn.disabled)return;
+  localStorage.setItem("ue_email",email.value.trim());
+  localStorage.setItem("ue_studentNumber",student.value.trim());
+  window.location.href="dashboard.html";
 });
-
-function validDOB(val){
-  return /^\d{2}\/\d{2}\/\d{4}$/.test(val.trim());
-}
-
-function validate(){
-  let ok = true;
-
-  if(!studentNumber.value.trim()){
-    studErr.style.display="block"; ok=false;
-  } else { studErr.style.display="none"; }
-
-  if(!accessCode.value.trim()){
-    codeErr.style.display="block"; ok=false;
-  } else { codeErr.style.display="none"; }
-
-  if(!validDOB(dob.value)){
-    dobErr.style.display="block"; ok=false;
-  } else { dobErr.style.display="none"; }
-
-  return ok;
-}
-
-function handleLogin(section){
-  if(!validate()) return;
-  localStorage.setItem("ue_studentNumber", studentNumber.value.trim());
-  localStorage.setItem("ue_email", studentNumber.value.trim() + "@ue.edu.ph");
-  localStorage.setItem("ue_section_type", section);
-  window.location.href = "dashboard.html";
-}
-
-btnFree.addEventListener("click",  () => handleLogin("free"));
-btnBlock.addEventListener("click", () => handleLogin("block"));
-
-// Clear errors on input
-[studentNumber, accessCode, dob].forEach(el =>
-  el.addEventListener("input", () => {
-    studErr.style.display="none";
-    codeErr.style.display="none";
-    dobErr.style.display="none";
-  })
-);
+validate();
 </script>
 </body>
 </html>
