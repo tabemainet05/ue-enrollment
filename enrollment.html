@@ -123,13 +123,14 @@
   }
 
   /* Stepper */
- .stepper{
-  overflow:auto;
-  justify-content:flex-start;
-  padding-bottom:6px;
-  -webkit-overflow-scrolling: touch;
-}
-.step{ min-width:120px; }
+  .stepper{
+    margin:22px auto 0;
+    max-width:760px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+  }
   
 .step{
     display:flex;
@@ -459,6 +460,25 @@
   tbody td:nth-child(3)::before{ content:"Schedule: "; font-weight:800; color:#475569; }
   tbody td:nth-child(4)::before{ content:"Professor: "; font-weight:800; color:#475569; }
 }
+  .topbar-inner{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .nav-actions{
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pill{
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+
 </style>
 </head>
 
