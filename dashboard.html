@@ -39,56 +39,74 @@
     backdrop-filter: blur(12px);
     border-bottom:1px solid var(--border);
   }
-/* ===== Mobile fixes: DASHBOARD header/nav spacing ===== */
-@media (max-width: 700px){
-
-  /* Stack brand + buttons neatly */
   .topbar-inner{
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px 14px;
+    max-width:1200px;
+    margin:0 auto;
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
   }
 
-  /* Slightly smaller logo/text */
+  .brand{
+    display:flex; align-items:center; gap:12px;
+  }
   .brand .logo{
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
+    width:56px; height:56px;
+    border-radius:16px;
+    background:var(--brand);
+    box-shadow:0 14px 30px rgba(207,10,10,.25);
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+    flex:0 0 auto;
   }
-  .brand .title strong{ font-size: 15px; }
-  .brand .title span{ font-size: 12px; }
+  .brand .logo img{
+    width:100%; height:100%;
+    object-fit:contain;
+    padding:6px;
+    background:transparent;
+  }
+  .brand .title{
+    display:flex; flex-direction:column; line-height:1.1;
+  }
+  .brand .title strong{
+    font-size:16px;
+    color:var(--brand);
+    letter-spacing:-.01em;
+  }
+  .brand .title span{
+    font-size:12.5px;
+    color:var(--muted);
+  }
 
-  /* Make nav buttons one horizontal row (scrollable) */
   .nav-actions{
-    width: 100%;
-    flex-wrap: nowrap;             /* ✅ prevents stacking */
-    overflow-x: auto;              /* ✅ scroll instead */
-    -webkit-overflow-scrolling: touch;
-    gap: 10px;
-    padding-bottom: 2px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
   }
-  .nav-actions::-webkit-scrollbar{ display:none; }
-
   .pill{
-    flex: 0 0 auto;                /* ✅ keeps pill width */
-    padding: 10px 14px;
-    font-size: 13px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 16px;
+    border-radius:999px;
+    border:1px solid rgba(15,23,42,.08);
+    background:#f3f4f6;
+    color:#0f172a;
+    font-weight:700;
+    font-size:14px;
+    text-decoration:none;
+    transition:.15s;
   }
+  .pill:hover{ filter:brightness(.98); }
+  .pill.primary{
+    background:linear-gradient(135deg,var(--brand),var(--brand2));
+    border-color:transparent;
+    color:#fff;
+    box-shadow:0 14px 26px rgba(207,10,10,.18);
+  }
+  .pill svg{ width:18px; height:18px; }
 
-  /* Reduce huge heading spacing on mobile */
-  h1{
-    font-size: 30px;
-    margin: 14px 0 6px;
-  }
-  .subtext{ font-size: 14px; }
-
-  /* Make student card fit nicer */
-  .student-card{
-    padding: 16px;
-    border-radius: 18px;
-  }
-}
   .red-line{
     height:3px;
     background:linear-gradient(90deg,var(--brand), rgba(207,10,10,.25), transparent);
@@ -510,5 +528,4 @@
 </script>
 
 </body>
-
 </html>
